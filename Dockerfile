@@ -1,5 +1,4 @@
-FROM alpine:3.7
-MAINTAINER Alastair Montgomery <alastair@montgomery.me.uk>
+FROM alpine:latest
 
 RUN apk --update \
     add lighttpd && \
