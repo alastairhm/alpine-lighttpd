@@ -8,6 +8,13 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 
 ## [Unreleased]
 
+## [[3.14]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.14) - 2021-07-22
+
+### Changed
+
+* Build with 3.14 Alpine base image
+* Readme updated
+
 ## [[3.13]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.13) - 2021-05-14
 
 ### Changed
