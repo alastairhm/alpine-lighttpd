@@ -21,3 +21,12 @@ docker run --rm --name "my-lighttpd" --rm -p 8000:80 -v $(pwd):/var/www ghcr.io/
 ```
 
 Works for static web content.
+
+```text
+          _    _ __  __ 
+    /\   | |  | |  \/  | Email   : alastair@montgomery.me.uk
+   /  \  | |__| | \  / | Web     : https://blog.0x32.co.uk/
+  / /\ \ |  __  | |\/| | Twitter : @alastair_hm
+ / ____ \| |  | | |  | |
+/_/    \_\_|  |_|_|  |_| (c) 2021
+```
