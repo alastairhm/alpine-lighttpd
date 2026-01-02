@@ -10,6 +10,7 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 
 * Build with 3.23 Alpine base image
 * Build with 3.22 Alpine base image
+* Woodpecker pipeline
 
 ## [[3.21]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.21) - 2024-12-22
 
