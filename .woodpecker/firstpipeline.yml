@@ -5,5 +5,7 @@ steps:
   - name: build
     image: alpine
     commands:
-      - echo "This is the build step"
-      - echo "Hello from Woodpecker CI"
+      - apk update
+      - apk add curl
+      - curl -sL https://taskfile.dev/install.sh | sh
+      - task build
