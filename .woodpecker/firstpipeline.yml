@@ -1,0 +1,9 @@
+when:
+  - event: push
+    branch: master
+steps:
+  - name: build
+    image: alpine
+    commands:
+      - echo "This is the build step"
+      - echo "Hello from Woodpecker CI"
