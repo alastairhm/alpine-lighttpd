@@ -3,9 +3,6 @@ when:
     branch: master
 steps:
   - name: build
-    image: alpine
+    image: alastairhm/alpine-builder
     commands:
-      - apk update
-      - apk add curl
-      - curl -sL https://taskfile.dev/install.sh | sh
       - task build
