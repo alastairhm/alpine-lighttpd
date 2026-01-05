@@ -1,0 +1,8 @@
+- name: build
+  image: woodpeckerci/plugin-docker-buildx
+  settings:
+    repo: woodpeckerci/woodpecker-agent
+    dockerfile: Dockerfile
+  when:
+  - event: manual
+    branch: master
