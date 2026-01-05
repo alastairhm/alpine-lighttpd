@@ -1,9 +1,14 @@
   when:
-    event: manual
-    branch: master
+    event: [push, manual]
+    branch: main
 
   steps:
   - name: build
     image: woodpeckerci/plugin-docker-buildx:6
     settings:
       repo: alastairhm/alpine-lighttpd
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      tag: latest
