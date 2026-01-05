@@ -1,7 +1,9 @@
-- name: build
-  image: woodpeckerci/plugin-docker-buildx
-  settings:
-    repo: alastairhm/alpine-lighttpd
   when:
     event: manual
     branch: master
+
+  steps:
+  - name: build
+    image: woodpeckerci/plugin-docker-buildx
+    settings:
+      repo: alastairhm/alpine-lighttpd
