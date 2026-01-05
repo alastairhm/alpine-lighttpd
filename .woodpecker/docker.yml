@@ -4,5 +4,5 @@
     repo: woodpeckerci/woodpecker-agent
     dockerfile: Dockerfile
   when:
-  - event: manual
+    event: manual
     branch: master
