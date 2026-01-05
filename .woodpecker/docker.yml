@@ -4,6 +4,6 @@
 
   steps:
   - name: build
-    image: woodpeckerci/plugin-docker-buildx
+    image: woodpeckerci/plugin-docker-buildx:6
     settings:
       repo: alastairhm/alpine-lighttpd
