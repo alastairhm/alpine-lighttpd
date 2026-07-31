@@ -12,6 +12,15 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 * Build with 3.22 Alpine base image
 * Woodpecker pipeline
 
+### Fixed
+
+* Run lighttpd as the package-provided `lighttpd` user instead of creating a
+  redundant, unpinned-uid `www-data` account
+* Use `CMD` instead of `ENTRYPOINT` so `docker run <image> <cmd>` replaces the
+  container command instead of being silently appended to lighttpd's arguments
+* Deny access to dotfiles/dot-directories (e.g. `.git`) via `mod_access`, and
+  updated README volume-mount example to avoid serving non-public files
+
 ## [[3.21]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.21) - 2024-12-22
 
 * Build with 3.19 Alpine base image
