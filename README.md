@@ -25,6 +25,16 @@ intend to serve — anything under the mounted path is reachable over HTTP, so a
 mounting a repo root or other directory containing non-public files (e.g. `.git`,
 `Dockerfile`, secrets).
 
+## Taskfile
+
+A [Taskfile](https://taskfile.dev) is provided with build/test/push tasks:
+
+```bash
+task build # Build the alastairhm/alpine-lighttpd:latest image
+task test  # Build, run the image, and confirm dotfiles (e.g. html/.env) are denied by mod_access
+task push  # Runs `test` first, then pushes alastairhm/alpine-lighttpd:latest to Docker Hub
+```
+
 ```text
           _    _ __  __ 
     /\   | |  | |  \/  | Email   : alastair@montgomery.me.uk

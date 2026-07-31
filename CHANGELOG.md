@@ -8,7 +8,26 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 
 ## [Unreleased]
 
-## [[3.23.1]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.23.1) - 2026-06-31
+### Added
+
+* Taskfile `test` task: builds the image, runs it, and checks that a
+  dotfile under `html/` (e.g. `.env`) is denied by `mod_access`
+* `html/.env` sample dotfile used by the `test` task
+
+### Changed
+
+* `push` task now depends on `test`, so a failing dotfile-deny check
+  blocks the Docker Hub push
+* Bumped GitHub Actions to current major versions (`checkout@v4`,
+  `login-action@v3`, `build-push-action@v6`)
+
+### Fixed
+
+* Tidied `html/index.html` into a valid HTML5 document (doctype,
+  charset, matching `<h1>` tags)
+* Corrected invalid `3.23.1` release date (`2026-06-31` -> `2026-07-31`)
+
+## [[3.23.1]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.23.1) - 2026-07-31
 
 * Build with 3.23 Alpine base image
 * Build with 3.22 Alpine base image
