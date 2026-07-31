@@ -9,8 +9,25 @@ tasks:
     cmds:
       - docker buildx build -t alastairhm/alpine-lighttpd:latest ./
     silent: true
+  test:
+    desc: Verify dotfiles (e.g. html/.env) are denied by mod_access
+    deps: [build]
+    cmds:
+      - |
+        set -e
+        cid=$(docker run -d --rm -p 18080:80 -v "$(pwd)/html:/var/www" alastairhm/alpine-lighttpd:latest)
+        trap 'docker stop "$cid" >/dev/null' EXIT
+        sleep 1
+        code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:18080/.env)
+        if [ "$code" != "403" ]; then
+          echo "expected 403 for /.env, got $code"
+          exit 1
+        fi
+        echo "OK: /.env denied with 403"
+    silent: true
   push:
     desc: Push to Docker Hub
+    deps: [test]
     cmds:
       - docker push alastairhm/alpine-lighttpd:latest
     silent: true
