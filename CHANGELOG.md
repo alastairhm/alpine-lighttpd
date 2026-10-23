@@ -13,6 +13,7 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 * Taskfile `test` task: builds the image, runs it, and checks that a
   dotfile under `html/` (e.g. `.env`) is denied by `mod_access`
 * `html/.env` sample dotfile used by the `test` task
+* `CLAUDE.md` with repository guidance for Claude Code
 
 ### Changed
 
