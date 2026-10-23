@@ -31,7 +31,8 @@ A [Taskfile](https://taskfile.dev) is provided with build/test/push tasks:
 
 ```bash
 task build # Build the alastairhm/alpine-lighttpd:latest image
-task test  # Build, run the image, and confirm dotfiles (e.g. html/.env) are denied by mod_access
+task test  # Build and smoke-test the image: / is served, dotfiles/dot-dirs return 403,
+           # lighttpd runs as the lighttpd user, and CMD can be overridden
 task push  # Runs `test` first, then pushes alastairhm/alpine-lighttpd:latest to Docker Hub
 ```
 
