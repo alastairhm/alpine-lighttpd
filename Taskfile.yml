@@ -10,20 +10,54 @@ tasks:
       - docker buildx build -t alastairhm/alpine-lighttpd:latest ./
     silent: true
   test:
-    desc: Verify dotfiles (e.g. html/.env) are denied by mod_access
+    desc: Smoke-test the image (serving, dotfile deny, non-root user, CMD override)
     deps: [build]
+    env:
+      # Host the published port is reachable on; CI sets this to its dind service
+      TEST_HOST: '{{.TEST_HOST | default "localhost"}}'
     cmds:
       - |
         set -e
-        cid=$(docker run -d --rm -p 18080:80 -v "$(pwd)/html:/var/www" alastairhm/alpine-lighttpd:latest)
+        image=alastairhm/alpine-lighttpd:latest
+        base="http://$TEST_HOST:18080"
+        fail() { echo "FAIL: $*"; exit 1; }
+
+        # CMD (not ENTRYPOINT) must be replaceable by `docker run <image> <cmd>`
+        out=$(docker run --rm "$image" echo cmd-override-ok)
+        [ "$out" = "cmd-override-ok" ] || fail "CMD override printed '$out'"
+        echo "OK: CMD can be overridden"
+
+        # Copy content in rather than bind-mounting, so this also works
+        # against a remote/dind Docker daemon in CI
+        cid=$(docker create --rm -p 18080:80 "$image")
         trap 'docker stop "$cid" >/dev/null' EXIT
-        sleep 1
-        code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:18080/.env)
-        if [ "$code" != "403" ]; then
-          echo "expected 403 for /.env, got $code"
-          exit 1
-        fi
-        echo "OK: /.env denied with 403"
+        docker cp html/. "$cid:/var/www/"
+        docker start "$cid" >/dev/null
+
+        i=0
+        until curl -s -o /dev/null "$base/"; do
+          i=$((i + 1))
+          [ "$i" -lt 50 ] || fail "server not ready after 10s"
+          sleep 0.2
+        done
+
+        # Index page is served as HTML with the expected content
+        ctype=$(curl -s -o /dev/null -w "%{content_type}" "$base/")
+        [ "$ctype" = "text/html" ] || fail "expected text/html for /, got '$ctype'"
+        curl -s "$base/" | grep -q "Hello World from Lighttpd" || fail "/ body missing expected text"
+        echo "OK: / served as text/html"
+
+        # Dotfiles and dot-directories are denied, including encoded/traversal forms
+        for path in /.env /.hidden/secret.txt /%2eenv /%2ehidden/secret.txt /x/../.env; do
+          code=$(curl -s --path-as-is -o /dev/null -w "%{http_code}" "$base$path")
+          [ "$code" = "403" ] || fail "expected 403 for $path, got $code"
+          echo "OK: $path denied with 403"
+        done
+
+        # Worker runs as the package-provided lighttpd user, not root
+        user=$(docker exec "$cid" ps -o user,comm | awk '$2 == "lighttpd" { print $1 }')
+        [ "$user" = "lighttpd" ] || fail "lighttpd running as '$user'"
+        echo "OK: lighttpd runs as lighttpd user"
     silent: true
   push:
     desc: Push to Docker Hub

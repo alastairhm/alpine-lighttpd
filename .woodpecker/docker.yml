@@ -2,7 +2,27 @@
     event: [push, manual]
     branch: master
 
+  # Docker daemon for the test step; privileged requires the repo to be
+  # marked "trusted" in Woodpecker
+  services:
+  - name: docker
+    image: docker:27-dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+
   steps:
+  - name: test
+    image: docker:27-cli
+    environment:
+      DOCKER_HOST: tcp://docker:2375
+      TEST_HOST: docker
+    commands:
+    - apk add --no-cache curl
+    - sh -c "$(curl -fsSL https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+    - until docker info >/dev/null 2>&1; do sleep 1; done
+    - task test
+
   - name: build
     image: woodpeckerci/plugin-docker-buildx:6
     settings:

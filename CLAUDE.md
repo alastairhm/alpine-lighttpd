@@ -12,11 +12,11 @@ Tasks are defined in `Taskfile.yml` ([go-task](https://taskfile.dev)):
 
 ```bash
 task build   # docker buildx build -t alastairhm/alpine-lighttpd:latest ./
-task test    # build, run on host port 18080 with ./html mounted, assert GET /.env returns 403
+task test    # build, run on port 18080 with ./html copied in, run smoke checks
 task push    # runs test first, then pushes to Docker Hub
 ```
 
-`task test` is the only test. It checks that the `mod_access` dotfile-deny rule in `lighttpd.conf` works, using `html/.env` as a deliberately "secret" fixture. Don't delete `html/.env`. If you add more checks, put them in the `test` task so they also gate `push`.
+`task test` is the only test. It checks that `/` is served as `text/html`, that dotfiles and dot-directories (including `%2e`-encoded and `../` forms) return 403, that lighttpd runs as the `lighttpd` user, and that `CMD` can be overridden. `html/.env` and `html/.hidden/secret.txt` are deliberately "secret" fixtures. Don't delete them. Content is `docker cp`'d into the container instead of bind-mounted so the test also works against a remote Docker daemon. `TEST_HOST` (default `localhost`) sets where port 18080 is reached. If you add more checks, put them in the `test` task so they also gate `push`.
 
 Manual run: `docker run --rm -p 8000:80 -v $(pwd)/html:/var/www alastairhm/alpine-lighttpd`
 
@@ -30,7 +30,7 @@ Manual run: `docker run --rm -p 8000:80 -v $(pwd)/html:/var/www alastairhm/alpin
 ## CI / publishing
 
 Two pipelines build from `master`, and each pushes `:latest` to a different registry:
-- `.woodpecker/docker.yml` pushes to Docker Hub (`alastairhm/alpine-lighttpd`).
+- `.woodpecker/docker.yml` runs `task test` against a privileged `docker:dind` service (the repo must be trusted in Woodpecker), then pushes to Docker Hub (`alastairhm/alpine-lighttpd`).
 - `.github/workflows/deploy.yml` pushes to GHCR (`ghcr.io/<repo>`). It also runs on PRs to `master`.
 
 ## Versioning
