@@ -8,17 +8,16 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 
 ## [Unreleased]
 
+## [[3.23.2]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.23.2) - 2026-10-23
+
 ### Added
 
-* Taskfile `test` task: builds the image, runs it, and checks that a
-  dotfile under `html/` (e.g. `.env`) is denied by `mod_access`
-* `html/.env` sample dotfile used by the `test` task
+* Taskfile `test` task: builds the image, runs it, and checks that `/`
+  is served as `text/html`, that dotfiles and dot-directories (including
+  `%2e`-encoded and `../` paths) return 403, that lighttpd runs as the
+  `lighttpd` user, and that `CMD` can be overridden
+* `html/.env` and `html/.hidden/secret.txt` fixtures used by the `test` task
 * `CLAUDE.md` with repository guidance for Claude Code
-* `test` task now also checks that `/` is served as `text/html`, that
-  dot-directories and `%2e`-encoded or `../` dotfile paths return 403,
-  that lighttpd runs as the `lighttpd` user, and that `CMD` can be
-  overridden
-* `html/.hidden/secret.txt` dot-directory fixture used by the `test` task
 * Woodpecker pipeline runs `task test` (via a `docker:dind` service)
   before pushing to Docker Hub
 
@@ -30,9 +29,6 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
   `login-action@v3`, `build-push-action@v6`)
 * GitHub workflow now runs `task test` before building, so a failing
   dotfile-deny check blocks the GHCR push
-* `test` task polls for readiness instead of a fixed `sleep 1`, and
-  copies `html/` into the container instead of bind-mounting it so it
-  works against a remote Docker daemon
 
 ### Fixed
 
