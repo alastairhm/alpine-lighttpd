@@ -20,11 +20,16 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
   blocks the Docker Hub push
 * Bumped GitHub Actions to current major versions (`checkout@v4`,
   `login-action@v3`, `build-push-action@v6`)
+* GitHub workflow now runs `task test` before building, so a failing
+  dotfile-deny check blocks the GHCR push
 
 ### Fixed
 
 * Tidied `html/index.html` into a valid HTML5 document (doctype,
   charset, matching `<h1>` tags)
+* GitHub workflow no longer pushes `:latest` to GHCR on pull requests;
+  PRs now build and test only
+* Corrected misleading trigger comment in the GitHub workflow
 * Corrected invalid `3.23.1` release date (`2026-06-31` -> `2026-07-31`)
 
 ## [[3.23.1]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.23.1) - 2026-07-31
