@@ -13,8 +13,10 @@ tasks:
     desc: Smoke-test the image (serving, dotfile deny, non-root user, CMD override)
     deps: [build]
     env:
-      # Host the published port is reachable on; CI sets this to its dind service
-      TEST_HOST: '{{.TEST_HOST | default "localhost"}}'
+      # Host the published port is reachable on; CI sets this to its dind service.
+      # 127.0.0.1 rather than localhost: localhost may resolve to ::1 first, and
+      # lighttpd only listens on IPv4 (rootless podman/pasta resets the connection)
+      TEST_HOST: '{{.TEST_HOST | default "127.0.0.1"}}'
     cmds:
       - |
         set -e

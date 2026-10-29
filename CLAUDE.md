@@ -16,7 +16,7 @@ task test    # build, run on port 18080 with ./html copied in, run smoke checks
 task push    # runs test first, then pushes to Docker Hub
 ```
 
-`task test` is the only test. It checks that `/` is served as `text/html`, that dotfiles and dot-directories (including `%2e`-encoded and `../` forms) return 403, that lighttpd runs as the `lighttpd` user, and that `CMD` can be overridden. `html/.env` and `html/.hidden/secret.txt` are deliberately "secret" fixtures. Don't delete them. Content is `docker cp`'d into the container instead of bind-mounted so the test also works against a remote Docker daemon. `TEST_HOST` (default `localhost`) sets where port 18080 is reached. If you add more checks, put them in the `test` task so they also gate `push`.
+`task test` is the only test. It checks that `/` is served as `text/html`, that dotfiles and dot-directories (including `%2e`-encoded and `../` forms) return 403, that lighttpd runs as the `lighttpd` user, and that `CMD` can be overridden. `html/.env` and `html/.hidden/secret.txt` are deliberately "secret" fixtures. Don't delete them. Content is `docker cp`'d into the container instead of bind-mounted so the test also works against a remote Docker daemon. `TEST_HOST` (default `127.0.0.1`, since `localhost` can resolve to IPv6 `::1` and lighttpd listens on IPv4 only) sets where port 18080 is reached. If you add more checks, put them in the `test` task so they also gate `push`.
 
 Manual run: `docker run --rm -p 8000:80 -v $(pwd)/html:/var/www alastairhm/alpine-lighttpd`
 

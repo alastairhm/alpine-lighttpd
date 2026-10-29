@@ -8,6 +8,17 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 
 ## [Unreleased]
 
+### Changed
+
+* Bumped base image to `alpine:3.24`
+
+### Fixed
+
+* `test` task now defaults `TEST_HOST` to `127.0.0.1` instead of
+  `localhost`. `localhost` can resolve to `::1` first, and lighttpd only
+  listens on IPv4, so the readiness check failed under rootless podman
+  (pasta), which resets the IPv6 connection
+
 ## [[3.23.2]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.23.2) - 2026-10-23
 
 ### Added
