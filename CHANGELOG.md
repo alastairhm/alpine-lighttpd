@@ -8,6 +8,14 @@ Dates in this file are in format of YYYY-MM-DD (2019-12-13 means 13th of Decembe
 
 ## [Unreleased]
 
+### Added
+
+* Weekly scheduled rebuild (Mondays 04:00 UTC) in the GitHub workflow,
+  plus a manual `workflow_dispatch` trigger, so `:latest` on GHCR picks up
+  Alpine point releases and package security fixes without a commit
+* Woodpecker pipeline also runs on `cron` events, so a weekly cron set in
+  the repo settings rebuilds the Docker Hub image
+
 ## [[3.24.1]](https://github.com/alastairhm/alpine-lighttpd/releases/tag/3.24.1) - 2026-11-20
 
 ### Changed

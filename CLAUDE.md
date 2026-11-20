@@ -31,7 +31,9 @@ Manual run: `docker run --rm -p 8000:80 -v $(pwd)/html:/var/www alastairhm/alpin
 
 Two pipelines build from `master`, and each pushes `:latest` to a different registry:
 - `.woodpecker/docker.yml` runs `task test` against a privileged `docker:dind` service (the repo must be trusted in Woodpecker), then pushes to Docker Hub (`alastairhm/alpine-lighttpd`).
-- `.github/workflows/deploy.yml` pushes to GHCR (`ghcr.io/<repo>`). It also runs on PRs to `master`.
+- `.github/workflows/deploy.yml` pushes to GHCR (`ghcr.io/<repo>`). It also runs on PRs to `master` (test only, no push), weekly on a schedule, and on manual dispatch.
+
+The weekly rebuilds exist so `:latest` picks up Alpine point releases and package fixes. The GitHub schedule is in the workflow file. The Woodpecker schedule is a cron entry in the repo settings UI (branch `master`), and the pipeline's `when` must keep `cron` in its event list.
 
 ## Versioning
 

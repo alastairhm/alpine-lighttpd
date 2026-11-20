@@ -1,5 +1,7 @@
+  # cron: a weekly schedule (repo settings -> Cron, branch master) rebuilds
+  # the image to pick up Alpine point releases and package security fixes
   when:
-    event: [push, manual]
+    event: [push, manual, cron]
     branch: master
 
   # Docker daemon for the test step; privileged requires the repo to be

@@ -1,12 +1,16 @@
 name: Deploy Docker
 
-# Build and smoke-test on pushes and PRs to master; only pushes to master
-# publish the image to GHCR.
+# Build and smoke-test on pushes and PRs to master; pushes to master, the
+# weekly schedule and manual runs publish the image to GHCR. The schedule
+# picks up Alpine point releases and package security fixes.
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  schedule:
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
 
 jobs:
   Deploy:
